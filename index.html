@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lavishly+Yours&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body, nav, footer, .auth-buttons button, .login-form, .modal-content, .signup-option {
+            font-family: 'JetBrains Mono', Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f9d5d5;
+            color: #ffffff;
+        }
+
+        header {
+            color: #f4f4f4;
+            padding: 1.5rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .auth-buttons {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            margin-right: 10px;
+        }
+
+        .auth-buttons button {
+            background-color: #9f5b5b;
+            color: #f4f4f4;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .auth-buttons button:hover {
+            background-color: #c06565;
+            color: #f4f4f4;
+            transform: scale(1.1);
+        }
+
+        header h1 {
+            font-family: 'Lavishly Yours', cursive;
+            font-size: 8rem;
+            color: #9f5b5b;
+            margin: 0;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            }
+            50% {
+                transform: scale(1.05);
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        nav {
+            padding: 1rem 0;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 0 15px;
+            position: relative;
+        }
+
+        nav ul li a {
+            color: #9f5b5b;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            position: relative;
+            display: inline-block;
+            transition: transform 0.3s ease, color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        nav ul li a:hover {
+            color: #c06565;
+        }
+
+        nav ul li a:before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #ffffff;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        nav ul li a:hover:before {
+            width: 100%;
+            left: 0;
+        }
+
+        nav ul li a:after {
+            content: "";
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #de4c4c;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        nav ul li a:hover:after {
+            width: 100%;
+            left: 0;
+        }
+
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container h1 {
+            color: #ffffff;
+        }
+
+        .container p {
+            font-size: 18px;
+            color: #deb8b8;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            padding: 1rem;
+            width: 100%;
+        }
+
+        footer p {
+            font-size: 1rem;
+            background: linear-gradient(135deg, #9f5b5b, #540606);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            margin: 0.5rem 0;
+        }
+
+        footer .social-icons a {
+            color: #9f5b5b;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        footer .social-icons a:hover {
+            color: #c06565;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .modal-content {
+            background-color: #f9d5d5;
+            color: #ffffff;
+            margin: 15% auto;
+            padding: 20px;
+            width: 50%;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .modal-content .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .login-form .input-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80%;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .login-form .input-container label {
+            width: 120px;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .login-form .input-container input[type="text"],
+        .login-form .input-container input[type="password"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ffffff;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .login-form button {
+            background-color: #9f5b5b;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .login-form button:hover {
+            background-color: #c06565;
+        }
+
+        .forgot-password {
+            display: block;
+            margin-top: 10px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .signup-option {
+            display: block;
+            margin: 10px auto;
+            text-align: center;
+            width: 60%;
+            padding: 10px;
+            font-size: 1rem;
+            background-color: #9f5b5b;
+            color: #ffffff;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .signup-option:hover {
+            background-color: #c06565;
+        }
+
+        #loadingScreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #ffffff;
+            text-align: center;
+            font-size: 2rem;
+            padding-top: 20%;
+            z-index: 1000;
+            transition: all 0.5s ease;
+        }
+
+        #loadingScreen.check {
+            color: #4CAF50;
+            font-size: 3rem;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #9f5b5b;
+        }
+
+        .eye-icon:hover {
+            color: #c06565;
+        }
+
+        .social-icons a {
+            color: #ffffff;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #d96fa6;
+        }
+
+        .carousel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            width: calc(100vw - 40px);
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-slide {
+            flex: 0 0 300px;
+            margin: 0 10px;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            border-radius: 20px;
+        }
+
+        .carousel-slide.focus {
+            transform: scale(1.1) rotateY(10deg) translateZ(15px);
+            z-index: 1;
+            box-shadow: 0 0 20px rgba(255, 182, 193, 0.8), 0 0 40px rgba(255, 105, 180, 0.6),
+                        0 0 60px rgba(255, 20, 147, 0.5), 0px 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-slide:not(.focus) {
+            opacity: 0.5;
+            filter: grayscale(40%) blur(1px);
+        }
+
+        @keyframes softGlow {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(255, 182, 193, 0.5), 0 0 20px rgba(255, 105, 180, 0.4);
+            }
+            100% {
+                transform: scale(1.05);
+                box-shadow: 0 0 20px rgba(255, 182, 193, 0.8), 0 0 40px rgba(255, 105, 180, 0.6);
+            }
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50%)); }
+        }
+
+        .high-res-image {
+            width: 100%; 
+            height: auto;
+            object-fit: cover;
+        }
+
+        .animated-text {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            height: 80px;
+            letter-spacing: 2px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .animated-text span {
+            opacity: 0;
+            animation: typing 0.1s forwards;
+            font-size: 3rem;
+        }
+
+        @keyframes typing {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        #forgotPasswordModal .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        #forgotPasswordModal .input-container label {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #9f5b5b;
+        }
+
+        .modal-content .forgot-password-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Charmé</h1>
+        <div class="auth-buttons">
+            <button id="loginBtn">Login</button>
+            <button id="signupBtn">Sign Up</button>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="bracelet.html">BRACELET</a></li>
+            <li><a href="earrings.html">EARRINGS</a></li>
+            <li><a href="clip charms.html">CLIPS</a></li>
+            <li><a href="necklace.html">NECKLACE</a></li>
+        </ul>
+    
+        <form id="searchForm" onsubmit="return searchProduct()" style="position: fixed; top: 20px; left: 20px; display: flex; align-items: center;">
+            <input type="text" id="searchInput" placeholder="Search..." style="padding: 5px; border-radius: 5px; margin-right: 5px;">
+            <button type="submit" style="padding: 5px; background-color: #9f5b5b; border: none; color: white; border-radius: 5px; cursor: pointer;">
+                Search
+            </button>
+        </form>
+    </nav>
+
+    <div class="animated-text" id="animatedText"></div>
+
+    <div class="carousel">
+        <div class="carousel-track">
+            <div class="carousel-slide">
+                <img src="../Images/b1_11zon.jpg" alt="Image 1">
+            </div>
+            <div class="carousel-slide">
+                <img src="../Images/c6_11zon.jpeg" alt="Image 2">
+            </div>
+            <div class="carousel-slide">
+                <img src="../Images/e3.jfif" alt="Image 3">
+            </div>
+            <div class="carousel-slide">
+                <img src="../Images/n3_11zon.jpeg" alt="Image 4">
+            </div>
+            <div class="carousel-slide">
+                <img src="../Images/b2_11zon.jpeg" alt="Image 5">
+            </div>
+            <div class="carousel-slide">
+                <img src="../Images/n4_11zon.jpeg" alt="Image 6">
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Charmé. All rights reserved.</p>
+            <p>Contact Us: <a href="mailto:charmebusiness24.com">charmebusiness24.com</a> | Phone: + 099 456 7890</p>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/profile.php?id=61568684602559&mibextid=ZbWKwL"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://x.com/charmea2024"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/charmebusiness24/"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="loadingScreen">Verifying... Please wait</div>
+
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close login-close">&times;</span>
+            <h2>Login</h2>
+            <form class="login-form">
+                <div class="input-container">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                </div>
+                <div class="input-container">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    <span class="material-symbols-outlined eye-icon" id="togglePassword">visibility_off</span>
+                </div>
+                <button type="submit">Login</button>
+                <a href="#" class="forgot-password" onclick="showForgotPasswordModal()">Forgot Password?</a>
+            </form>
+        </div>
+    </div>
+
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close forgot-password-close">&times;</span>
+            <h2 style="color: #540606; text-align: center;">Forgot Password</h2>
+            <p style="color: #deb8b8; text-align: center;">Enter your email address to reset your password:</p>
+            <div class="input-container" style="width: 80%; margin: 0 auto; text-align: left;">
+                <label for="forgotPasswordEmail" style="display: block; margin-bottom: 5px; color: #9f5b5b;">Email:</label>
+                <input type="email" id="forgotPasswordEmail" placeholder="Enter your email" required 
+                       style="width: 100%; padding: 10px; border: 1px solid #0c0303; border-radius: 4px; margin-bottom: 15px;">
+            </div>
+            <button onclick="sendResetLink()" style="background-color: #540606; color: white; border: none; 
+                    padding: 10px; border-radius: 5px; cursor: pointer; width: 80%; margin: 0 auto; display: block;">
+                Send Reset Link
+            </button>
+        </div>
+    </div>
+
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close signup-close">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="signupForm">
+                <div class="input-container">
+                    <input 
+                        type="text" 
+                        id="phoneNumber" 
+                        placeholder="Enter your Phone Number" 
+                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px;"
+                        required
+                    >
+                </div>
+                <button 
+                    id="nextButton" 
+                    type="button" 
+                    style="width: 100%; padding: 10px; background-color: #fa6a5c; color: white; border: none; border-radius: 5px; font-size: 1.1rem; margin-bottom: 15px; cursor: pointer;"
+                >
+                    Next
+                </button>
+    
+                <div style="text-align: center; color: #aaa; margin: 15px 0;">OR</div>
+                <button 
+                    id="facebookSignup" 
+                    type="button" 
+                    style="width: 100%; padding: 10px; background-color: #3b5998; color: white; border: none; border-radius: 5px; font-size: 1.1rem; margin-bottom: 10px; cursor: pointer;"
+                >
+                    <i class="fab fa-facebook-f"></i> Sign Up with Facebook
+                </button>
+                <button 
+                    id="googleSignup" 
+                    type="button" 
+                    style="width: 100%; padding: 10px; background-color: #db4437; color: white; border: none; border-radius: 5px; font-size: 1.1rem; margin-bottom: 10px; cursor: pointer;"
+                >
+                    <i class="fab fa-google"></i> Sign Up with Google
+                </button>
+                <p style="font-size: 0.9rem; text-align: center; color: #888;">
+                    By signing up, you agree to <a href="#" style="color: #fa6a5c;">Terms of Service</a> & 
+                    <a href="#" style="color: #fa6a5c;">Privacy Policy</a>.
+                </p>
+                Already have an account? 
+                <a href="#" id="loginLink" style="color: #fa6a5c; font-weight: bold;">Log In</a>
+            </p>
+            </form>
+        </div>
+    </div>
+    
+    
+
+    
+
+    <script>
+        var loginModal = document.getElementById("authModal");
+        var signupModal = document.getElementById("signupModal");
+        var loginBtn = document.getElementById("loginBtn");
+        var signupBtn = document.getElementById("signupBtn");
+        var loginCloseBtn = document.querySelector(".login-close");
+        var signupCloseBtn = document.querySelector(".signup-close");
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const textElement = document.getElementById('animatedText');
+            const text = "FEATURED PRODUCTS";
+            const colors = ["#9f5b5b", "#540606", "#d96fa6", "#8c2929", "#c06565"];
+
+            function typeText() {
+                textElement.innerHTML = '';
+                text.split("").forEach((char, i) => {
+                    const span = document.createElement("span");
+                    span.textContent = char === " " ? "\u00A0" : char;
+                    span.style.color = colors[i % colors.length];
+                    span.style.animationDelay = `${i * 0.1}s`;
+                    textElement.appendChild(span);
+                });
+                setTimeout(typeText, 3000);
+            }
+
+            typeText();
+        });
+
+        const carouselTrack = document.querySelector('.carousel-track');
+        const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+        let currentIndex = 0;
+        const slideWidth = slides[0].offsetWidth + 20;
+
+        slides.forEach(slide => {
+            const clone = slide.cloneNode(true);
+            carouselTrack.appendChild(clone);
+        });
+
+        function updateFocus() {
+            slides.forEach(slide => slide.classList.remove('focus'));
+            slides[currentIndex].classList.add('focus');
+
+            carouselTrack.style.transition = 'transform 0.5s ease';
+            carouselTrack.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+
+            if (currentIndex >= slides.length) {
+                setTimeout(() => {
+                    carouselTrack.style.transition = 'none';
+                    currentIndex = 0;
+                    carouselTrack.style.transform = `translateX(0)`;
+                }, 500);
+            }
+        }
+        const adminUsername = "adminUser";
+        const adminPassword = "adminPass";
+
+        setInterval(() => {
+            currentIndex++;
+            updateFocus();
+        }, 2000);
+
+        function showLoadingScreen() {
+            const loadingScreen = document.getElementById("loadingScreen");
+            loadingScreen.textContent = "Verifying... Please wait";
+            loadingScreen.style.display = "block";
+
+            setTimeout(() => {
+                loadingScreen.textContent = "✔ Verified";
+                loadingScreen.classList.add("check");
+            }, 2000);
+
+            setTimeout(() => {
+                window.location.href = "account.html";
+            }, 3000);
+        }
+
+        loginBtn.onclick = function() {
+            loginModal.style.display = "block";
+        }
+
+        signupBtn.onclick = function() {
+            signupModal.style.display = "block";
+        }
+
+        loginCloseBtn.onclick = function() {
+            loginModal.style.display = "none";
+        }
+
+        signupCloseBtn.onclick = function() {
+            signupModal.style.display = "none";
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+    const nextButton = document.getElementById("nextButton");
+    const facebookSignup = document.getElementById("facebookSignup");
+    const googleSignup = document.getElementById("googleSignup");
+    const phoneNumberInput = document.getElementById("phoneNumber");
+
+    // Ensure the "Next" button is clickable after validation
+    nextButton.addEventListener("click", () => {
+        const phoneNumber = phoneNumberInput.value.trim();
+        if (phoneNumber.length === 11 && /^\d+$/.test(phoneNumber)) {
+            window.location.href = "signup.html";
+        } else {
+            alert("Please enter a valid 11-digit phone number.");
+        }
+    });
+
+    // Facebook Signup
+    facebookSignup.addEventListener("click", () => {
+        window.location.href = "account.html";
+    });
+
+    // Google Signup
+    googleSignup.addEventListener("click", () => {
+        window.location.href = "account.html";
+    });
+});
+document.addEventListener("DOMContentLoaded", () => {
+    const loginLink = document.getElementById("loginLink");
+    const signupModal = document.getElementById("signupModal");
+    const loginModal = document.getElementById("authModal");
+
+    loginLink.addEventListener("click", () => {
+        // Close the signup modal
+        signupModal.style.display = "none";
+        // Open the login modal
+        loginModal.style.display = "block";
+    });
+});
+
+
+        document.querySelector('.login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    const adminUsername = "adminUser";
+    const adminPassword = "adminPass";
+
+    if (username === adminUsername && password === adminPassword) {
+        window.location.href = "admin.html";
+    } else if (username) {
+        const email = `${username}@gmail.com`;
+        localStorage.setItem('loggedInUser', username);
+        localStorage.setItem('loggedInEmail', email);
+        showLoadingScreen();
+        setTimeout(() => {
+            window.location.href = "account.html";
+        }, 3000);
+    } else {
+        alert("Please enter your username.");
+    }
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const phoneNumberInput = document.getElementById('phoneNumber');
+    const nextButton = document.getElementById('nextButton');
+
+    // Ensure the "Next" button is clickable but behaves as required
+    nextButton.disabled = true; // Initial state is disabled
+    nextButton.style.cursor = 'not-allowed';
+    nextButton.style.backgroundColor = '#ccc';
+
+    // Listen for input changes
+    phoneNumberInput.addEventListener('input', () => {
+        const phoneNumber = phoneNumberInput.value.trim();
+        if (phoneNumber.length === 11 && /^\d+$/.test(phoneNumber)) { // Validate numeric and length
+            nextButton.disabled = false;
+            nextButton.style.cursor = 'pointer';
+            nextButton.style.backgroundColor = '#fa6a5c'; // Active color
+        } else {
+            nextButton.disabled = true;
+            nextButton.style.cursor = 'not-allowed';
+            nextButton.style.backgroundColor = '#ccc'; // Disabled color
+        }
+    });
+
+    // Handle button click
+    nextButton.addEventListener('click', () => {
+        const phoneNumber = phoneNumberInput.value.trim();
+        if (phoneNumber.length === 11 && /^\d+$/.test(phoneNumber)) { // Validate again before redirecting
+            window.location.href = 'signup.html';
+        } else {
+            alert('Phone number must be exactly 11 digits and numeric.');
+        }
+    });
+});
+
+
+
+        document.querySelectorAll('.signup-option').forEach(button => {
+            button.addEventListener('click', function() {
+                showLoadingScreen();
+            });
+        });
+
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            this.textContent = type === 'password' ? 'visibility_off' : 'visibility';
+        });
+
+        function showForgotPasswordModal() {
+            document.getElementById("forgotPasswordModal").style.display = "block";
+        }
+
+        document.querySelector(".forgot-password-close").onclick = function() {
+            document.getElementById("forgotPasswordModal").style.display = "none";
+        }
+
+        document.querySelector(".login-close").onclick = function() {
+            loginModal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == loginModal) {
+                loginModal.style.display = "none";
+            }
+            if (event.target == signupModal) {
+                signupModal.style.display = "none";
+            }
+            if (event.target == document.getElementById("forgotPasswordModal")) {
+                document.getElementById("forgotPasswordModal").style.display = "none";
+            }
+        }
+
+        function sendResetLink() {
+            const email = document.getElementById('forgotPasswordEmail').value;
+            if (email) {
+                alert("A password reset link has been sent to " + email);
+                document.getElementById("forgotPasswordModal").style.display = "none";
+            } else {
+                alert("Please enter your email address.");
+            }
+        }
+
+        function searchProduct() {
+            const query = document.getElementById("searchInput").value.toLowerCase().trim();
+
+            if (query.includes("bracelet")) {
+                window.location.href = "bracelet.html";
+            } else if (query.includes("earrings")) {
+                window.location.href = "earrings.html";
+            } else if (query.includes("clip charms") || query.includes("clips")) {
+                window.location.href = "clip charms.html";
+            } else if (query.includes("necklace")) {
+                window.location.href = "necklace.html";
+            } else {
+                alert("Product not found. Try searching for 'bracelet', 'earrings', 'clips', or 'necklace'.");
+            }
+
+            return false;
+        }
+        // Get references to elements
+const nextButton = document.getElementById('nextButton');
+const phoneNumberInput = document.getElementById('phoneNumber');
+
+// Add event listener to "Next" button
+nextButton.addEventListener('click', () => {
+    const phoneNumber = phoneNumberInput.value.trim(); // Get the input value
+    if (phoneNumber.length !== 11 || isNaN(phoneNumber)) {
+        // Show an alert if the number is not valid
+        alert('Phone number must be exactly 11 digits and numeric!');
+    } else {
+        // Navigate to signup.html if valid
+        window.location.href = 'signup.html';
+    }
+});
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

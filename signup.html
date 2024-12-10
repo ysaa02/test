@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification and Password Setup</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Add Font Awesome CDN for Eye Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-dygjoXv/VR+aYTSGkWYGGfFdyGHpJ6uDxvCT8lDKpXqZ9BX6tRcgGEOs3A6PoxvJj3LvsmVunBxAyk6h0XwCwQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'JetBrains Mono', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffe6f0; /* Light Pink Background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 60%;
+            margin-bottom: 30px;
+        }
+
+        .progress-step {
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .progress-step span {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            background-color: #f4f4f4;
+            border-radius: 50%;
+            color: #888;
+            margin-bottom: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .progress-step.active span {
+            background-color: #a52a2a; /* Brownish-Red */
+            color: white;
+        }
+
+        .progress-step.done span {
+            background-color: #a52a2a; /* Brownish-Red */
+            color: white;
+        }
+
+        .progress-line {
+            flex: 1;
+            height: 2px;
+            background-color: #f4f4f4;
+            transition: background-color 0.3s;
+        }
+
+        .progress-line.active {
+            background-color: #a52a2a; /* Brownish-Red */
+        }
+
+        .verification-box, .password-box, .success-box {
+            width: 60%;
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .verification-box {
+            display: block;
+        }
+
+        .password-box {
+            display: none;
+        }
+
+        .success-box {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .verification-box h1, .password-box h1, .success-box h1 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .verification-box input[type="text"],
+        .password-box input[type="password"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            position: relative;
+            /* Added padding-right for the eye icon */
+            padding-right: 40px;
+        }
+
+        .verification-box button,
+        .password-box button,
+        .success-box button {
+            padding: 10px 20px;
+            background-color: #a52a2a; /* Brownish-Red */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .verification-box button:hover,
+        .password-box button:hover,
+        .success-box button:hover {
+            background-color: #8b0000; /* Darker Brownish-Red */
+        }
+
+        .back-arrow {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 1.5rem;
+            color: #a52a2a; /* Brownish-Red */
+            text-decoration: none;
+        }
+
+        .back-arrow:hover {
+            color: #8b0000; /* Darker Brownish-Red */
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 15px;
+        }
+
+        /* Success Checkmark Styles */
+        .success-box .checkmark {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #a52a2a; /* Brownish-Red */
+            color: white;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: popIn 0.5s ease-in-out;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Toggle Eye Icon Styles */
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #a52a2a; /* Brownish-Red */
+            font-size: 1.2rem;
+        }
+
+        .toggle-password:hover {
+            color: #8b0000; /* Darker Brownish-Red */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .progress-bar {
+                width: 90%;
+            }
+            .verification-box, .password-box, .success-box {
+                width: 90%;
+            }
+            .verification-box input[type="text"],
+            .password-box input[type="password"] {
+                width: 90%;
+                padding-right: 40px; /* Maintain space for the eye icon */
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-arrow">&larr;</a>
+    <div class="progress-bar">
+        <div class="progress-step active" id="step-1">
+            <span>1</span>
+            <p>Verify phone no.</p>
+        </div>
+        <div class="progress-line active"></div>
+        <div class="progress-step" id="step-2">
+            <span>2</span>
+            <p>Create password</p>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step" id="step-3">
+            <span>&#10003;</span>
+            <p>Done</p>
+        </div>
+    </div>
+
+    <!-- Verification Code Input -->
+    <div class="verification-box" id="verification-box">
+        <h1>Enter Verification Code</h1>
+        <div class="error-message" id="verification-error"></div>
+        <input type="text" id="verification-code" placeholder="Enter 4-digit Code" maxlength="4">
+        <button id="submit-code">Submit</button>
+    </div>
+    <!-- Password Creation -->
+    <div class="password-box" id="password-box">
+        <h1>Create Your Password</h1>
+        <div class="error-message" id="password-error"></div>
+        
+        <!-- New Password Input with Toggle -->
+        <div style="position: relative;">
+            <input type="password" id="new-password" placeholder="Enter New Password">
+            <i class="fas fa-eye toggle-password" onclick="togglePassword('new-password')"></i>
+        </div>
+        
+        <!-- Confirm Password Input with Toggle -->
+        <div style="position: relative;">
+            <input type="password" id="confirm-password" placeholder="Confirm New Password">
+            <i class="fas fa-eye toggle-password" onclick="togglePassword('confirm-password')"></i>
+        </div>
+        
+        <button id="submit-password">Submit</button>
+    </div>
+
+    <!-- Success Checkmark -->
+    <div class="success-box" id="success-box">
+        <div class="checkmark">&#10004;</div>
+        <h1>Setup Complete!</h1>
+        <button id="proceed-login">Proceed to Log In</button>
+    </div>
+
+    <script>
+        // Sample verification code (In real scenarios, generate and send this via backend)
+        const VALID_CODE = "1234";
+
+        // Elements
+        const submitCodeBtn = document.getElementById('submit-code');
+        const verificationCodeInput = document.getElementById('verification-code');
+        const verificationError = document.getElementById('verification-error');
+
+        const submitPasswordBtn = document.getElementById('submit-password');
+        const newPasswordInput = document.getElementById('new-password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const passwordError = document.getElementById('password-error');
+
+        const verificationBox = document.getElementById('verification-box');
+        const passwordBox = document.getElementById('password-box');
+        const successBox = document.getElementById('success-box');
+
+        const proceedLoginBtn = document.getElementById('proceed-login');
+
+        // Event Listeners
+        submitCodeBtn.addEventListener('click', function() {
+            const enteredCode = verificationCodeInput.value.trim();
+            verificationError.textContent = "";
+
+            if (enteredCode === "") {
+                verificationError.textContent = "Please enter the verification code.";
+                return;
+            }
+
+            if (enteredCode.length !== 4 || !/^\d{4}$/.test(enteredCode)) {
+                verificationError.textContent = "Please enter a valid 4-digit code.";
+                return;
+            }
+
+            // Simulate verification (Replace with actual backend verification)
+            if (enteredCode === VALID_CODE) {
+                proceedToPasswordCreation();
+            } else {
+                verificationError.textContent = "Invalid verification code. Please try again.";
+            }
+        });
+
+        submitPasswordBtn.addEventListener('click', function() {
+            const password = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            passwordError.textContent = "";
+
+            if (password === "" || confirmPassword === "") {
+                passwordError.textContent = "Please fill in all password fields.";
+                return;
+            }
+
+            if (password.length < 6) {
+                passwordError.textContent = "Password must be at least 6 characters long.";
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                passwordError.textContent = "Passwords do not match. Please try again.";
+                return;
+            }
+
+            // Here, you would typically send the password to your backend for further processing
+            // For demonstration, we'll proceed to success
+            proceedToSuccess();
+        });
+
+        proceedLoginBtn.addEventListener('click', function() {
+            // Redirect to login page
+            window.location.href = "index.html"; // Change to your actual login page URL
+        });
+
+        // Functions to handle transitions
+        function proceedToPasswordCreation() {
+            // Update progress bar
+            document.getElementById('step-1').classList.remove('active');
+            document.getElementById('step-1').classList.add('done');
+            document.querySelector('.progress-line').classList.add('active');
+
+            document.getElementById('step-2').classList.add('active');
+
+            // Transition UI
+            verificationBox.style.display = 'none';
+            passwordBox.style.display = 'block';
+        }
+
+        function proceedToSuccess() {
+            // Update progress bar
+            document.getElementById('step-2').classList.remove('active');
+            document.getElementById('step-2').classList.add('done');
+            document.querySelectorAll('.progress-line')[1].classList.add('active');
+
+            document.getElementById('step-3').classList.add('active');
+
+            // Transition UI
+            passwordBox.style.display = 'none';
+            successBox.style.display = 'flex';
+        }
+
+        // Function to toggle password visibility
+        function togglePassword(fieldId) {
+            const passwordField = document.getElementById(fieldId);
+            const toggleIcon = passwordField.nextElementSibling;
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
+</html>
